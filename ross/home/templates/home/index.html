@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROSS</title>
+</head>
+<body>
+
+    <h1>ROSS<h1>
+    <hr>
+    <h2>Text to ASCII</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="hidden" name="action" value="text">
+
+        <label>Enter Text</label><br>
+        <input type="text" name="text" required>
+
+        <br><br>
+
+        <label>Font</label><br>
+        <select name="font">
+            {% for font in fonts %}
+                <option value="{{ font }}">{{ font }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label>Color</label><br>
+        <select name="color">
+            {% for color in colors %}
+                <option value="{{ color }}">{{ color }}</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <button type="submit">Generate ASCII</button>
+
+        <br><br>
+
+        <label>Output</label><br>
+
+        <textarea
+            rows="10"
+            cols="50"
+            style="color: {{ selected_color }};"
+            readonly>{{ text_result }}</textarea>
+
+    </form>
+
+    <hr>
+
+
+    <h2>Image to ASCII</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="hidden" name="action" value="image">
+
+        <label>Select Image</label><br>
+        <input type="file" name="image" required>
+
+        <br><br>
+
+        <label>Mode</label><br>
+
+        <input type="radio" name="mode" value="normal" checked>
+        Normal
+
+        <input type="radio" name="mode" value="invert">
+        Invert
+
+        <br><br>
+
+        <button type="submit">Convert Image</button>
+
+        <br><br>
+
+        <label>Output</label><br>
+
+        <textarea
+            rows="50"
+            cols="120"
+            readonly>{{ image_result }}</textarea>
+
+    </form>
+
+</body>
+</html>
