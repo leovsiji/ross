@@ -1,6 +1,7 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
+
 
 <link rel="stylesheet" href="{% static 'home/style.css' %}">
 <head>
@@ -17,7 +18,7 @@
 <body>
 
     <div class="navbar-bg"></div>
-    <img src="{% static 'home\logo.ico' %}" alt="ROSS" class="logo">
+    <img src="{% static 'home/logo.ico' %}" alt="ROSS" class="logo">
     <div class="theme-toggle-wrap">
         <input type="checkbox" id="theme-toggle">
         <label for="theme-toggle" class="theme-switch"></label>
