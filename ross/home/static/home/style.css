@@ -438,7 +438,7 @@ textarea{
 
 form:nth-of-type(2) textarea{
   font-size: 0.42rem;
-  height: 200px; 
+  height: 600px; 
 }
 
 .output-wrap{
