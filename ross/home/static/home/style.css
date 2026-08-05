@@ -417,7 +417,7 @@ textarea{
   display: block;
   width: 100%;
   max-width: 100%;
-  height: 140px;
+  height: 200px;
   margin: 0 auto;
   resize: vertical;
   background: linear-gradient(180deg, var(--field-bg-top), var(--field-bg-bottom));
@@ -445,6 +445,10 @@ form:nth-of-type(2) textarea{
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
+}
+
+form:nth-of-type(2) .output-wrap{
+  max-width: 100%;
 }
 
 .copy-btn{
