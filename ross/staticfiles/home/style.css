@@ -412,7 +412,7 @@ button{
 button:hover{ background: var(--rose); transform: translateY(-1px); }
 button:active{ transform: translateY(0); }
 
-   Same visible gray glass treatment as the text inputs/select above. */
+/* Same visible gray glass treatment as the text inputs/select above. */
 textarea{
   display: block;
   width: 100%;
