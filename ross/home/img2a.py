@@ -4,9 +4,9 @@ from PIL import Image
 def imgtoa(image_file, mode="normal"):
 
     if mode == "normal":
-        ASCII = "@0%#*+=-:."
+        ASCII = "@%#*+=-:."
     else:
-        ASCII = ".:-=+*#%0@"
+        ASCII = ".:-=+*#%@"
 
     img = Image.open(image_file)
     img = img.convert("L")

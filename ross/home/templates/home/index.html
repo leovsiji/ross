@@ -1,95 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'home/style.css' %}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROSS</title>
+    <title>ROSE</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'home/logo.ico' %}">
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
 </head>
 <body>
 
-    <h1>ROSS<h1>
+    <div class="navbar-bg"></div>
+    <img src="{% static 'home\logo.ico' %}" alt="ROSS" class="logo">
+    <div class="theme-toggle-wrap">
+        <input type="checkbox" id="theme-toggle">
+        <label for="theme-toggle" class="theme-switch"></label>
+    </div>
+
     <hr>
     <h2>Text to ASCII</h2>
 
-    <form method="POST">
+    <form method="POST" data-scroll-form>
         {% csrf_token %}
-
         <input type="hidden" name="action" value="text">
-
         <label>Enter Text</label><br>
         <input type="text" name="text" required>
-
         <br><br>
-
         <label>Font</label><br>
         <select name="font">
             {% for font in fonts %}
                 <option value="{{ font }}">{{ font }}</option>
             {% endfor %}
         </select>
-
         <br><br>
-
         <label>Color</label><br>
         <select name="color">
             {% for color in colors %}
                 <option value="{{ color }}">{{ color }}</option>
             {% endfor %}
         </select>
-
         <br><br>
-
         <button type="submit">Generate ASCII</button>
-
         <br><br>
-
         <label>Output</label><br>
-
-        <textarea
-            rows="10"
-            cols="50"
-            style="color: {{ selected_color }};"
-            readonly>{{ text_result }}</textarea>
-
+        <div class="output-wrap">
+            <textarea
+                id="text-output"
+                rows="10"
+                cols="50"
+                style="color: {{ selected_color }};"
+                readonly>{{ text_result }}</textarea>
+            <button type="button" class="copy-btn" data-copy-target="text-output">Copy</button>
+        </div>
     </form>
-
     <hr>
-
-
     <h2>Image to ASCII</h2>
-
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" data-scroll-form>
         {% csrf_token %}
-
         <input type="hidden" name="action" value="image">
-
         <label>Select Image</label><br>
         <input type="file" name="image" required>
-
         <br><br>
-
         <label>Mode</label><br>
-
-        <input type="radio" name="mode" value="normal" checked>
-        Normal
-
-        <input type="radio" name="mode" value="invert">
-        Invert
-
+        <input type="radio" name="mode" value="normal" id="mode-normal" checked>
+        <label for="mode-normal">Non Invert</label>
+        <input type="radio" name="mode" value="invert" id="mode-invert">
+        <label for="mode-invert">Invert</label>
         <br><br>
-
         <button type="submit">Convert Image</button>
-
         <br><br>
-
         <label>Output</label><br>
-
-        <textarea
-            rows="50"
-            cols="120"
-            readonly>{{ image_result }}</textarea>
-
+        <div class="output-wrap">
+            <textarea
+                id="image-output"
+                rows="50"
+                cols="120"
+                readonly>{{ image_result }}</textarea>
+            <button type="button" class="copy-btn" data-copy-target="image-output">Copy</button>
+        </div>
     </form>
 
+    <script>
+        (function () {
+            var root = document.documentElement;
+            var toggle = document.getElementById('theme-toggle');
+            var saved = localStorage.getItem('theme');
+
+            if (saved === 'dark') {
+                root.setAttribute('data-theme', 'dark');
+                toggle.checked = true;
+            }
+
+            toggle.addEventListener('change', function () {
+                if (toggle.checked) {
+                    root.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    root.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        })();
+
+     
+        document.querySelectorAll('[data-scroll-form]').forEach(function (form) {
+            form.addEventListener('submit', function () {
+                sessionStorage.setItem('scrollY', window.scrollY);
+            });
+        });
+
+        window.addEventListener('DOMContentLoaded', function () {
+            var y = sessionStorage.getItem('scrollY');
+            if (y !== null) {
+                window.scrollTo(0, parseInt(y, 10));
+                sessionStorage.removeItem('scrollY');
+            }
+        });
+
+        
+        document.querySelectorAll('.copy-btn').forEach(function (btn) {
+            var targetId = btn.getAttribute('data-copy-target');
+            var source = document.getElementById(targetId);
+            if (!source) return;
+
+            btn.addEventListener('click', function () {
+                var text = source.value;
+
+                function showCopied() {
+                    var original = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(function () {
+                        btn.textContent = original;
+                        btn.classList.remove('copied');
+                    }, 1500);
+                }
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(showCopied).catch(function () {
+                        fallbackCopy(text, showCopied);
+                    });
+                } else {
+                    fallbackCopy(text, showCopied);
+                }
+            });
+        });
+
+        function fallbackCopy(text, onSuccess) {
+            var temp = document.createElement('textarea');
+            temp.value = text;
+            temp.style.position = 'fixed';
+            temp.style.opacity = '0';
+            document.body.appendChild(temp);
+            temp.focus();
+            temp.select();
+            try {
+                document.execCommand('copy');
+                onSuccess();
+            } catch (err) {
+                console.error('Copy failed:', err);
+            }
+            document.body.removeChild(temp);
+        }
+    </script>
 </body>
 </html>
