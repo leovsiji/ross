@@ -61,6 +61,27 @@
             <button type="button" class="copy-btn" data-copy-target="text-output">Copy</button>
         </div>
     </form>
+    <label>Output</label><br>
+        <div class="output-wrap">
+            <textarea
+                id="text-output"
+                rows="10"
+                cols="50"
+                style="color: {{ selected_color }};"
+                readonly>{{ text_result }}</textarea>
+            <button type="button" class="copy-btn" data-copy-target="text-output">Copy</button>
+        </div>
+        <br><br>
+        <label>Python Code</label><br>
+        <div class="output-wrap">
+            <textarea
+                id="code-output"
+                rows="10"
+                cols="50"
+                readonly>{{ code_result }}</textarea>
+            <button type="button" class="copy-btn" data-copy-target="code-output">Copy</button>
+        </div>
+    </form>
     <hr>
     <h2>Image to ASCII</h2>
     <form method="POST" enctype="multipart/form-data" data-scroll-form>

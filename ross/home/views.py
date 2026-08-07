@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from pyfiglet import FigletFont
 
-from .t2a import textoa, COLORS
+from .t2a import textoa, code, COLORS
 from .img2a import imgtoa 
 
 def index(request):
@@ -10,6 +10,7 @@ def index(request):
     colors = list(COLORS.keys())
 
     text_result = ""
+    code_result = ""
     image_result = ""
     selected_color = "black"   # default
 
@@ -24,6 +25,7 @@ def index(request):
             selected_color = request.POST.get("color")
 
             text_result = textoa(text, font, selected_color)
+            code_result = code(text, font, selected_color)
 
         elif action == "image":
             image = request.FILES.get("image")
@@ -36,6 +38,7 @@ def index(request):
         "fonts": fonts,
         "colors": colors,
         "text_result": text_result,
+        "code_result": code_result,
         "image_result": image_result,
         "selected_color": selected_color,
     })
